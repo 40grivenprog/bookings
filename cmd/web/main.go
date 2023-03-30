@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/40grivenprog/bookings/pkg/config"
-	"github.com/40grivenprog/bookings/pkg/handlers"
-	"github.com/40grivenprog/bookings/pkg/render"
+	"github.com/40grivenprog/bookings/internal/config"
+	"github.com/40grivenprog/bookings/internal/handlers"
+	"github.com/40grivenprog/bookings/internal/render"
 	"github.com/alexedwards/scs/v2"
 )
 
