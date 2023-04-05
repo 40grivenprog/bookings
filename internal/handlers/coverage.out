@@ -1,0 +1,22 @@
+mode: set
+github.com/40grivenprog/bookings/internal/handlers/handlers.go:24.47,28.2 1 1
+github.com/40grivenprog/bookings/internal/handlers/handlers.go:31.33,33.2 1 1
+github.com/40grivenprog/bookings/internal/handlers/handlers.go:36.67,41.2 3 1
+github.com/40grivenprog/bookings/internal/handlers/handlers.go:44.68,56.2 5 1
+github.com/40grivenprog/bookings/internal/handlers/handlers.go:59.74,68.2 4 1
+github.com/40grivenprog/bookings/internal/handlers/handlers.go:71.78,77.16 2 1
+github.com/40grivenprog/bookings/internal/handlers/handlers.go:82.2,94.19 6 1
+github.com/40grivenprog/bookings/internal/handlers/handlers.go:106.2,108.66 2 0
+github.com/40grivenprog/bookings/internal/handlers/handlers.go:77.16,80.3 2 0
+github.com/40grivenprog/bookings/internal/handlers/handlers.go:94.19,104.3 4 1
+github.com/40grivenprog/bookings/internal/handlers/handlers.go:112.71,114.2 1 1
+github.com/40grivenprog/bookings/internal/handlers/handlers.go:117.69,119.2 1 1
+github.com/40grivenprog/bookings/internal/handlers/handlers.go:122.75,124.2 1 0
+github.com/40grivenprog/bookings/internal/handlers/handlers.go:127.79,131.2 3 1
+github.com/40grivenprog/bookings/internal/handlers/handlers.go:139.79,147.16 3 1
+github.com/40grivenprog/bookings/internal/handlers/handlers.go:150.2,152.14 3 1
+github.com/40grivenprog/bookings/internal/handlers/handlers.go:147.16,149.3 1 0
+github.com/40grivenprog/bookings/internal/handlers/handlers.go:156.70,158.2 1 1
+github.com/40grivenprog/bookings/internal/handlers/handlers.go:160.81,163.9 2 0
+github.com/40grivenprog/bookings/internal/handlers/handlers.go:170.2,175.96 4 0
+github.com/40grivenprog/bookings/internal/handlers/handlers.go:163.9,168.3 4 0
