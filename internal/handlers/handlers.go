@@ -8,6 +8,7 @@ import (
 
 	"github.com/40grivenprog/bookings/internal/config"
 	"github.com/40grivenprog/bookings/internal/forms"
+	"github.com/40grivenprog/bookings/internal/helpers"
 	"github.com/40grivenprog/bookings/internal/models"
 	"github.com/40grivenprog/bookings/internal/render"
 )
@@ -34,25 +35,13 @@ func NewHandlers(r *Repository) {
 
 // Home is the handler for the home page
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	remoteIP := r.RemoteAddr
-	m.App.Session.Put(r.Context(), "remote_ip", remoteIP)
-
 	render.RenderTemplate(w, "home.page.tmpl", &models.TemplateData{}, r)
 }
 
 // About is the handler for the about page
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
-	// perform some logic
-	stringMap := make(map[string]string)
-	stringMap["test"] = "Hello, again"
-
-	remoteIP := m.App.Session.GetString(r.Context(), "remote_ip")
-	stringMap["remote_ip"] = remoteIP
-
 	// send data to the template
-	render.RenderTemplate(w, "about.page.tmpl", &models.TemplateData{
-		StringMap: stringMap,
-	}, r)
+	render.RenderTemplate(w, "about.page.tmpl", &models.TemplateData{}, r)
 }
 
 // Reservation renders the make a reservation page and displays form
@@ -75,7 +64,7 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 
 	if err != nil {
-		log.Println(err)
+		helpers.ServerError(w, err)
 		return
 	}
 
@@ -145,9 +134,12 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 	out, err := json.MarshalIndent(resp, "", "    ")
 
 	if err != nil {
-		log.Println(err)
+		helpers.ServerError(w, err)
+		return
 	}
+
 	log.Println(string(out))
+	
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(out)
 }
@@ -161,6 +153,7 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 
 	if !ok {
+		m.App.ErrorLog.Println("Can't get error from session")
 		log.Println("Error!")
 		m.App.Session.Put(r.Context(), "error", "Can't get reservation from session")
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
@@ -168,7 +161,7 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 	}
 
 	m.App.Session.Remove(r.Context(), "reservation")
-	
+
 	data := make(map[string]interface{})
 	data["reservation"] = reservation
 
