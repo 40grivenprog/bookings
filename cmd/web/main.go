@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/40grivenprog/bookings/internal/config"
+	"github.com/40grivenprog/bookings/internal/driver"
 	"github.com/40grivenprog/bookings/internal/handlers"
 	"github.com/40grivenprog/bookings/internal/helpers"
 	"github.com/40grivenprog/bookings/internal/models"
@@ -25,7 +26,13 @@ var errorLog *log.Logger
 
 // main is the main function
 func main() {
-	err := run()
+	db, err := run()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	
+	defer db.SQL.Close()
 
 	fmt.Printf("Staring application on port %s", portNumber)
 
@@ -40,9 +47,12 @@ func main() {
 	}
 }
 
-func run() error {
+func run() (*driver.DB, error) {
 	// what i am going to put in the session
 	gob.Register(models.Reservation{})
+	gob.Register(models.User{})
+	gob.Register(models.Room{})
+	gob.Register(models.Restriction{})
 	// change this to true when in production
 	app.InProduction = false
 	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
@@ -60,20 +70,28 @@ func run() error {
 
 	app.Session = session
 
+	// connect to db
+	log.Println("Connecting to db")
+	db, err := driver.ConnectSql("host=localhost port=5432 dbname=bookings user=postgres password=postgres")
+	
+	if err != nil {
+		log.Fatal("Can not connect to DB FATAL!")
+	}
+
 	tc, err := render.CreateTemplateCache()
 
 	if err != nil {
 		log.Fatal("cannot create template cache")
-		return err
+		return nil, err
 	}
 
 	app.TemplateCache = tc
 	app.UseCache = false
 
-	repo := handlers.NewRepo(&app)
+	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
-	render.NewTemplates(&app)
+	render.NewRenderer(&app)
 	helpers.NewHelpers(&app)
 
-	return nil
+	return db, nil
 }

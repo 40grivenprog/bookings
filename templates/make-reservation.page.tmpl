@@ -4,11 +4,20 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1 class="mt-3">Make Reservation</h1>
-                
                 {{$res := index .Data "reservation"}}
+                
+                <h1 class="mt-3">Make Reservation</h1>
+                <p><strong>Reservation Details</strong><br>
+                  Arrival:   {{index .StringMap "start_date"}}<br>
+                  Departure: {{index .StringMap "end_date"}}<br>
+                  Room Name: {{$res.Room.RoomName}}
+                </p>
+                
                 <form method="post" action="/make-reservation" class="" novalidate>
                     <input type="hidden" name="csrf_token" value="{{index .CSRFToken}}">
+                    <input type="hidden" name='start_date' value="{{index .StringMap "start_date"}}">
+                    <input type="hidden" name='end_date' value="{{index .StringMap "end_date"}}">
+                    <input type="hidden" name='room_id' value="{{$res.RoomID}}"> 
 
                     <div class="form-group mt-3">
                         <label for="first_name">First Name:</label>
@@ -22,7 +31,7 @@
 
                     <div class="form-group">
                         <label for="last_name">Last Name:</label>
-                        {{ with .Form.Errors.Get "lasst_name" }}
+                        {{ with .Form.Errors.Get "last_name" }}
                           <label class="text-danger">{{.}}</label> // when we use with we get access to object that we got from with statement using .
                         {{end}}
                         <input class="form-control {{with .Form.Errors.Get "last_name"}}is-invalid{{end}}"
